@@ -11,6 +11,7 @@
     "check:biome": "biome check --write ./src"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.9.0",
     "@conform-to/react": "^1.2.2",
     "@conform-to/zod": "^1.2.2",
     "@hono/zod-validator": "^0.4.1",
