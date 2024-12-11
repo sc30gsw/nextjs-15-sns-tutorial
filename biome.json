@@ -1,15 +1,15 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"ignore": []
-	},
-	"formatter": {
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": []
+  },
+  "formatter": {
     "enabled": true,
     "indentStyle": "space"
   },
@@ -49,7 +49,8 @@
         "lib/fetcher.ts",
         "postcss.config.mjs",
         "next.config.ts",
-        "components/ui/index.ts"
+        "components/ui/index.ts",
+        "drizzle.config.ts"
       ],
       "linter": {
         "rules": {
