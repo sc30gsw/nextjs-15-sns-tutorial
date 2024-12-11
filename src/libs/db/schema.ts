@@ -1,9 +1,7 @@
 import { relations, sql } from 'drizzle-orm'
 import {
-  boolean,
   check,
   index,
-  integer,
   pgTable,
   primaryKey,
   text,
@@ -13,13 +11,11 @@ import {
 export const users = pgTable(
   'users',
   {
-    id: integer('id').primaryKey(),
+    id: text('id').primaryKey(),
     email: text('email').unique().notNull(),
     name: text('name'),
     image: text('image'),
     bio: text('bio'),
-    emailVerified: boolean('email_verified').notNull().default(false),
-    password: text('password').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
   },
@@ -41,9 +37,9 @@ export const userRelations = relations(users, ({ many }) => ({
 export const posts = pgTable(
   'posts',
   {
-    id: integer('id').primaryKey(),
+    id: text('id').primaryKey(),
     content: text('content').notNull(),
-    authorId: integer('author_id')
+    authorId: text('author_id')
       .notNull()
       .references(() => users.id),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
@@ -68,10 +64,10 @@ export const postRelations = relations(posts, ({ one, many }) => ({
 export const likes = pgTable(
   'likes',
   {
-    postId: integer('post_id')
+    postId: text('post_id')
       .notNull()
       .references(() => posts.id),
-    userId: integer('user_id')
+    userId: text('user_id')
       .notNull()
       .references(() => users.id),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
@@ -99,12 +95,12 @@ export const likeRelations = relations(likes, ({ one }) => ({
 export const replies = pgTable(
   'replies',
   {
-    id: integer('id').primaryKey(),
+    id: text('id').primaryKey(),
     content: text('content').notNull(),
-    authorId: integer('author_id')
+    authorId: text('author_id')
       .notNull()
       .references(() => users.id),
-    postId: integer('post_id')
+    postId: text('post_id')
       .notNull()
       .references(() => posts.id),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
@@ -132,10 +128,10 @@ export const replyRelations = relations(replies, ({ one }) => ({
 export const follows = pgTable(
   'follows',
   {
-    followerId: integer('follower_id')
+    followerId: text('follower_id')
       .notNull()
       .references(() => users.id),
-    followingId: integer('following_id')
+    followingId: text('following_id')
       .notNull()
       .references(() => users.id),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
