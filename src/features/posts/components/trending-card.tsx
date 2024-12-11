@@ -18,9 +18,9 @@ export const TrendingCard = () => {
           {TRENDING.map((trend) => (
             <li key={trend.name} className="flex justify-between items-center">
               <p className="text-base">{trend.name}</p>
-              <span className="text-sm text-muted-foreground text-neutral-600 bg-neutral-300 opacity-90 px-2 py-1 rounded">
+              <div className="h-[1.30rem] px-1 rounded-md text-muted-fg text-xs font-medium ring-1 ring-fg/20 grid place-content-center w-auto bg-fg/[0.02] dark:bg-fg/10">
                 {trend.count}
-              </span>
+              </div>
             </li>
           ))}
         </ul>
