@@ -1,6 +1,6 @@
 CREATE TABLE "follows" (
-	"follower_id" integer NOT NULL,
-	"following_id" integer NOT NULL,
+	"follower_id" text NOT NULL,
+	"following_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "follows_follower_id_following_id_pk" PRIMARY KEY("follower_id","following_id"),
@@ -8,32 +8,32 @@ CREATE TABLE "follows" (
 );
 --> statement-breakpoint
 CREATE TABLE "likes" (
-	"post_id" integer NOT NULL,
-	"user_id" integer NOT NULL,
+	"post_id" text NOT NULL,
+	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "likes_user_id_post_id_pk" PRIMARY KEY("user_id","post_id")
 );
 --> statement-breakpoint
 CREATE TABLE "posts" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"content" text NOT NULL,
-	"author_id" integer NOT NULL,
+	"author_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "replies" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"content" text NOT NULL,
-	"author_id" integer NOT NULL,
-	"post_id" integer NOT NULL,
+	"author_id" text NOT NULL,
+	"post_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"email" text NOT NULL,
 	"name" text,
 	"image" text,
