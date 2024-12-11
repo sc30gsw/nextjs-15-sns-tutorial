@@ -3,7 +3,6 @@ import { PostCard } from '@/features/posts/components/post-card'
 import { PostForm } from '@/features/posts/components/post-form'
 import { TrendingCard } from '@/features/posts/components/trending-card'
 import { currentUser } from '@clerk/nextjs/server'
-import {} from 'justd-icons'
 
 const Home = async () => {
   const user = await currentUser()
