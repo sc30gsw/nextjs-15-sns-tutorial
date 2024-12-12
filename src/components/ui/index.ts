@@ -15,3 +15,4 @@ export * from './search-field'
 export * from './form'
 export * from './card'
 export * from './heading'
+export * from './skeleton';

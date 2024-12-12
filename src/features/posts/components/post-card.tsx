@@ -1,11 +1,12 @@
 import { Avatar, Card, Separator } from '@/components/ui'
 import { PostReplies } from '@/features/replies/components/post-replies'
+import { ReplySkelton } from '@/features/replies/components/reply-skelton'
 import type { client } from '@/libs/rpc'
 import { formatTimeAgo } from '@/utils/format-time'
 import type { InferResponseType } from 'hono'
 import { IconClock, IconForward, IconHeart, IconMessage } from 'justd-icons'
 import Link from 'next/link'
-import type { ReactNode } from 'react'
+import { type ReactNode, Suspense } from 'react'
 
 type Post = InferResponseType<typeof client.api.posts.$get>['posts'][number]
 
@@ -61,7 +62,19 @@ export const PostCard = ({ item, children }: PostCardProps) => {
       </Card.Content>
       <Card.Footer className="flex flex-col gap-4">
         {children}
-        <PostReplies />
+        <Suspense
+          fallback={
+            <div className="w-full flex flex-col gap-4">
+              <ReplySkelton />
+              <Separator />
+              <ReplySkelton />
+              <Separator />
+              <ReplySkelton />
+            </div>
+          }
+        >
+          <PostReplies postId={item.posts.id} />
+        </Suspense>
       </Card.Footer>
     </Card>
   )

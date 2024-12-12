@@ -30,5 +30,5 @@ export const addReply = async (_: unknown, formData: FormData) => {
     content: submission.value.content,
   })
 
-  revalidateTag('comments')
+  revalidateTag(`replies/${submission.value.postId}`)
 }

@@ -9,15 +9,13 @@ const app = new Hono()
       .select({
         posts,
         users,
-        replies,
-        likes,
         repliesCount: db.$count(replies, eq(replies.postId, posts.id)),
         likesCount: db.$count(likes, eq(likes.postId, posts.id)),
       })
       .from(posts)
       .leftJoin(users, eq(posts.authorId, users.id))
-      .leftJoin(replies, eq(posts.id, replies.postId))
-      .leftJoin(likes, eq(posts.id, likes.postId))
+      .leftJoin(replies, eq(replies.postId, posts.id))
+      .leftJoin(likes, eq(likes.postId, posts.id))
       .orderBy(desc(posts.createdAt))
 
     return c.json({ posts: postList })
@@ -28,15 +26,13 @@ const app = new Hono()
       .select({
         posts,
         users,
-        replies,
-        likes,
         repliesCount: db.$count(replies, eq(replies.postId, posts.id)),
         likesCount: db.$count(likes, eq(likes.postId, posts.id)),
       })
       .from(posts)
       .leftJoin(users, eq(posts.authorId, users.id))
-      .leftJoin(replies, eq(posts.id, replies.postId))
-      .leftJoin(likes, eq(posts.id, likes.postId))
+      .leftJoin(replies, eq(replies.postId, posts.id))
+      .leftJoin(likes, eq(likes.postId, posts.id))
       .where(eq(posts.id, postId))
       .orderBy(desc(replies.createdAt))
 
