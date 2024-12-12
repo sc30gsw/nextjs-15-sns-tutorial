@@ -1,7 +1,9 @@
-import { config } from 'dotenv'
+// biome-ignore lint/style/noNamespaceImport: <explanation>
+import * as schema from '@/libs/db/schema'
 import { drizzle } from 'drizzle-orm/neon-http'
 
-// https://orm.drizzle.team/docs/tutorials/drizzle-nextjs-neon
-config({ path: '.env.local' })
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is not defined')
+}
 
-export const db = drizzle(process.env.DATABASE_URL ?? '')
+export const db = drizzle(process.env.DATABASE_URL, { schema })

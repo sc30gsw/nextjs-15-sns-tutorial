@@ -1,7 +1,7 @@
 import { Avatar } from '@/components/ui'
 import { IconHeart } from 'justd-icons'
 
-export const PostComments = () => {
+export const PostReplies = () => {
   return (
     <div className="flex w-full gap-4 items-center">
       <Avatar src={'placeholder.png'} alt="avatar" initials="A" />

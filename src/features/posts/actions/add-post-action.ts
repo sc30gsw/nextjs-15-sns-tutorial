@@ -5,7 +5,7 @@ import { db } from '@/libs/db/drizzle'
 import { posts } from '@/libs/db/schema'
 import { currentUser } from '@clerk/nextjs/server'
 import { parseWithZod } from '@conform-to/zod'
-import { redirect } from 'next/navigation'
+import { revalidateTag } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
 
 // https://conform.guide/integration/nextjs
@@ -30,5 +30,5 @@ export const addPost = async (_: unknown, formData: FormData) => {
     content: submission.value.content,
   })
 
-  redirect('/')
+  revalidateTag('posts')
 }

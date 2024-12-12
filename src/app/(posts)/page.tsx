@@ -1,5 +1,5 @@
 import { Avatar, Card } from '@/components/ui'
-import { PostCard } from '@/features/posts/components/post-card'
+import { PostCardContent } from '@/features/posts/components/post-card-content'
 import { PostForm } from '@/features/posts/components/post-form'
 import { TrendingCard } from '@/features/posts/components/trending-card'
 import { currentUser } from '@clerk/nextjs/server'
@@ -22,7 +22,7 @@ const Home = async () => {
             </div>
           </Card.Header>
           <Card.Content>
-            <PostCard />
+            <PostCardContent />
           </Card.Content>
         </Card>
       </div>

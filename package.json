@@ -16,6 +16,7 @@
     "@conform-to/zod": "^1.2.2",
     "@hono/zod-validator": "^0.4.1",
     "@neondatabase/serverless": "^0.10.4",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.0",
     "hono": "^4.6.13",
