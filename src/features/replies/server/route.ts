@@ -15,7 +15,7 @@ const app = new Hono().get('/:postId', async (c) => {
     where: eq(replies.postId, postId),
   })
 
-  return c.json({ replies: replyList })
+  return c.json({ replies: replyList }, 200)
 })
 
 export default app
