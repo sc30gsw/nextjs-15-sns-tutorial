@@ -1,4 +1,6 @@
+import { Separator } from '@/components/ui'
 import { PostCard } from '@/features/posts/components/post-card'
+import { ReplyForm } from '@/features/replies/components/reply-form'
 import { fetcher } from '@/libs/fetcher'
 import { client } from '@/libs/rpc'
 import type { InferResponseType } from 'hono'
@@ -33,7 +35,12 @@ const PostIdPage = async ({ params }: PostIdPageParams) => {
     next: { tags: [`posts/${postId}`] },
   })
 
-  return <PostCard item={res.post} />
+  return (
+    <PostCard item={res.post}>
+      <ReplyForm />
+      <Separator />
+    </PostCard>
+  )
 }
 
 export default PostIdPage

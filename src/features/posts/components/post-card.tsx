@@ -5,14 +5,16 @@ import { formatTimeAgo } from '@/utils/format-time'
 import type { InferResponseType } from 'hono'
 import { IconClock, IconForward, IconHeart, IconMessage } from 'justd-icons'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
 type Post = InferResponseType<typeof client.api.posts.$get>['posts'][number]
 
 type PostCardProps = {
   item: Post
+  children?: ReactNode
 }
 
-export const PostCard = ({ item }: PostCardProps) => {
+export const PostCard = ({ item, children }: PostCardProps) => {
   return (
     <Card>
       <Card.Header>
@@ -57,7 +59,8 @@ export const PostCard = ({ item }: PostCardProps) => {
         </div>
         <Separator />
       </Card.Content>
-      <Card.Footer>
+      <Card.Footer className="flex flex-col gap-4">
+        {children}
         <PostReplies />
       </Card.Footer>
     </Card>
