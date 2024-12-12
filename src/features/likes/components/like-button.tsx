@@ -1,7 +1,7 @@
 'use client'
 
 import { Form, TextField } from '@/components/ui'
-import { likeAction } from '@/features/likes/action/like-action'
+import { likeAction } from '@/features/likes/actions/like-action'
 import { likeFormSchema } from '@/features/likes/types/schema/like-form-schema'
 import { useUser } from '@clerk/nextjs'
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'

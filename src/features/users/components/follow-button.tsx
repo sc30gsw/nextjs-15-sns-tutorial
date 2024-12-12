@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Form, TextField } from '@/components/ui'
-import { followAction } from '@/features/users/action/follow-action'
+import { followAction } from '@/features/users/actions/follow-action'
 import { followFormSchema } from '@/features/users/type/schema/follow-form-schema'
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
