@@ -1,12 +1,11 @@
 import { Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { PostCard } from '@/features/posts/components/post-card'
 import { FollowButton } from '@/features/users/components/follow-button'
 import { fetcher } from '@/libs/fetcher'
 import { client } from '@/libs/rpc'
 import { currentUser } from '@clerk/nextjs/server'
 import type { InferResponseType } from 'hono'
-import { IconLocation, IconPin2, IconPlus } from 'justd-icons'
+import { IconLocation, IconPin2 } from 'justd-icons'
 import Link from 'next/link'
 
 type ResType = InferResponseType<(typeof client.api.users)[':userId']['$get']>
@@ -28,6 +27,14 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
   const res = await fetcher<ResType>(url, {
     next: { tags: ['user'] },
   })
+
+  const followerIdOfFollowing = res.following.map((f) => f.followerId)
+  const followerIds = res.followers.map((f) => f.followerId)
+  const followingIds = res.followers.map((f) => f.followingId)
+
+  const isFollowing =
+    followingIds.includes(loggedInUser?.id ?? '') &&
+    followerIds.includes(res.user?.id ?? '')
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
@@ -88,43 +95,45 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
             <div className="sticky top-14 self-start space-y-6">
               {loggedInUser?.id !== res.user?.id && (
                 <FollowButton
-                  isFollowing={res.following.some(
-                    (f) =>
-                      f.followerId === loggedInUser?.id &&
-                      f.followingId === res.user?.id,
-                  )}
+                  isFollowing={isFollowing}
                   userId={res.user?.id ?? ''}
                 />
               )}
-              {res.userWithoutMe.map((user) => (
-                <div key={user.id}>
-                  <h3 className="text-lg font-bold">Suggested</h3>
-                  <div className="mt-4 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Link href={`/profile/${user.id}`}>
-                        <Avatar
-                          src={user.image ?? '/placeholder-user.jpg'}
-                          alt="avatar"
-                          className="w-10 h-10"
-                        />
-                      </Link>
-                      <div>
-                        <div className="font-medium">{user.name}</div>
-                        <div className="text-muted-foreground text-sm">
-                          @{user.id.slice(0, 20)}
+              {res.userWithoutMe
+                .filter((user) => user.id !== loggedInUser?.id)
+                .map((user) => {
+                  const isFollowingOfWIthoutMe = followerIdOfFollowing.includes(
+                    user.id,
+                  )
+
+                  return (
+                    <div key={user.id}>
+                      <h3 className="text-lg font-bold">Suggested</h3>
+                      <div className="mt-4 space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Link href={`/profile/${user.id}`}>
+                            <Avatar
+                              src={user.image ?? '/placeholder-user.jpg'}
+                              alt="avatar"
+                              className="w-10 h-10"
+                            />
+                          </Link>
+                          <div>
+                            <div className="font-medium">{user.name}</div>
+                            <div className="text-muted-foreground text-sm">
+                              @{user.id.slice(0, 20)}
+                            </div>
+                          </div>
+                          <FollowButton
+                            isFollowing={isFollowingOfWIthoutMe}
+                            userId={user.id}
+                            isSuggestion={true}
+                          />
                         </div>
                       </div>
-                      <Button
-                        size="square-petite"
-                        appearance="outline"
-                        className="ml-auto"
-                      >
-                        <IconPlus className="size-4" />
-                      </Button>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  )
+                })}
             </div>
           </div>
         </div>

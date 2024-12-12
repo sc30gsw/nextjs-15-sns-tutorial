@@ -26,8 +26,8 @@ export const followAction = async (_: unknown, formData: FormData) => {
   // unfollow
   const existedFollow = await db.query.follows.findFirst({
     where: and(
-      eq(follows.followerId, currentUserId),
-      eq(follows.followingId, submission.value.userId),
+      eq(follows.followerId, submission.value.userId),
+      eq(follows.followingId, currentUserId),
     ),
   })
 
@@ -36,15 +36,15 @@ export const followAction = async (_: unknown, formData: FormData) => {
       .delete(follows)
       .where(
         and(
-          eq(follows.followerId, currentUserId),
-          eq(follows.followingId, submission.value.userId),
+          eq(follows.followerId, submission.value.userId),
+          eq(follows.followingId, currentUserId),
         ),
       )
   } else {
     // follow
     await db.insert(follows).values({
-      followerId: currentUserId,
-      followingId: submission.value.userId,
+      followerId: submission.value.userId,
+      followingId: currentUserId,
     })
   }
 

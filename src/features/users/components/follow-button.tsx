@@ -6,15 +6,25 @@ import { followFormSchema } from '@/features/users/type/schema/follow-form-schem
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { IconMinus, IconPlus } from 'justd-icons'
-import { useActionState } from 'react'
+import { useActionState, useOptimistic } from 'react'
 
 type FollowButtonProps = {
   isFollowing: boolean
   userId: string
+  isSuggestion?: boolean
 }
 
-export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
-  const [lastResult, action, isPending] = useActionState(followAction, null)
+export const FollowButton = ({
+  isFollowing,
+  userId,
+  isSuggestion,
+}: FollowButtonProps) => {
+  const [optimisticIsFollowing, setOptimisticIsFollowing] = useOptimistic<
+    boolean,
+    void
+  >(isFollowing, (currentState) => !currentState)
+
+  const [lastResult, action] = useActionState(followAction, null)
 
   const [form, fields] = useForm({
     constraint: getZodConstraint(followFormSchema),
@@ -22,40 +32,50 @@ export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: followFormSchema })
     },
-    // onSubmit() {
-    //   setOptimisticLike()
-    // },
+    onSubmit() {
+      setOptimisticIsFollowing()
+    },
     defaultValue: {
       userId,
     },
   })
-  return (
-    <Form {...getFormProps(form)} action={action}>
-      <TextField {...getInputProps(fields.userId, { type: 'hidden' })} />
-      {isPending ? (
+
+  if (isSuggestion) {
+    return (
+      <Form {...getFormProps(form)} action={action}>
+        <TextField {...getInputProps(fields.userId, { type: 'hidden' })} />
         <Button
           type="submit"
-          isDisabled={true}
+          size="square-petite"
           appearance="outline"
-          className="w-full"
+          className="ml-auto"
         >
-          {isFollowing ? 'Unfollowing...' : 'Following...'}
-        </Button>
-      ) : (
-        <Button
-          type="submit"
-          className="w-full"
-          intent={isFollowing ? 'secondary' : 'primary'}
-          appearance={isFollowing ? 'outline' : 'solid'}
-        >
-          {isFollowing ? 'Unfollow' : 'Follow'}
-          {isFollowing ? (
+          {optimisticIsFollowing ? (
             <IconMinus className="size-4 ml-2" />
           ) : (
             <IconPlus className="size-4 ml-2" />
-          )}
+          )}{' '}
         </Button>
-      )}
+      </Form>
+    )
+  }
+
+  return (
+    <Form {...getFormProps(form)} action={action}>
+      <TextField {...getInputProps(fields.userId, { type: 'hidden' })} />
+      <Button
+        type="submit"
+        className="w-full"
+        intent={optimisticIsFollowing ? 'secondary' : 'primary'}
+        appearance={optimisticIsFollowing ? 'outline' : 'solid'}
+      >
+        {optimisticIsFollowing ? 'Unfollow' : 'Follow'}
+        {optimisticIsFollowing ? (
+          <IconMinus className="size-4 ml-2" />
+        ) : (
+          <IconPlus className="size-4 ml-2" />
+        )}
+      </Button>
     </Form>
   )
 }
