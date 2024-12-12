@@ -5,6 +5,7 @@ import { ReplySkelton } from '@/features/replies/components/reply-skelton'
 import { fetcher } from '@/libs/fetcher'
 import { client } from '@/libs/rpc'
 import type { InferResponseType } from 'hono'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
 const fetchPost = async (postId: string) => {
@@ -17,6 +18,10 @@ const fetchPost = async (postId: string) => {
   const res = await fetcher<ResType>(url, {
     next: { tags: [`posts/${postId}`] },
   })
+
+  if (!res.post) {
+    notFound()
+  }
 
   return res
 }

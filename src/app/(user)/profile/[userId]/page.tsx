@@ -7,6 +7,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import type { InferResponseType } from 'hono'
 import { IconLocation, IconPin2 } from 'justd-icons'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 type ResType = InferResponseType<(typeof client.api.users)[':userId']['$get']>
 
@@ -27,6 +28,10 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
   const res = await fetcher<ResType>(url, {
     next: { tags: ['user'] },
   })
+
+  if (!res.user) {
+    notFound()
+  }
 
   const followerIdOfFollowing = res.following.map((f) => f.followerId)
   const followerIds = res.followers.map((f) => f.followerId)
