@@ -22,13 +22,13 @@ const app = new Hono()
 
     // フォローしているユーザーを取得
     const following = await db.query.follows.findMany({
-      where: eq(follows.followerId, userId),
+      where: eq(follows.followingId, userId),
       columns: {
-        followingId: true,
+        followerId: true,
       },
     })
 
-    const followingIds = following.map((follow) => follow.followingId)
+    const followerIds = following.map((follow) => follow.followerId)
 
     const postList = await db.query.posts.findMany({
       with: {
@@ -36,7 +36,7 @@ const app = new Hono()
         replies: true,
         likes: true,
       },
-      where: and(inArray(posts.authorId, followingIds)),
+      where: and(inArray(posts.authorId, followerIds)),
       orderBy: [desc(posts.createdAt)],
     })
 
