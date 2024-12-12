@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const replyFormSchema = z.object({
   // biome-ignore lint/style/useNamingConvention: This needs a snake_case name
-  postId: z.string({ required_error: 'Post ID is required' }),
+  postId: z.string({ required_error: 'Post Id is required' }),
   content: z
     // biome-ignore lint/style/useNamingConvention: This needs a snake_case name
     .string({ required_error: 'Content is required' })

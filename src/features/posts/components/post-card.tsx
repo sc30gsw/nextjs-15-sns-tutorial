@@ -1,8 +1,9 @@
 import { Avatar, Card } from '@/components/ui'
+import { LikeButton } from '@/features/likes/components/like-button'
 import type { client } from '@/libs/rpc'
 import { formatTimeAgo } from '@/utils/format-time'
 import type { InferResponseType } from 'hono'
-import { IconClock, IconForward, IconHeart, IconMessage } from 'justd-icons'
+import { IconClock, IconForward, IconMessage } from 'justd-icons'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
@@ -37,10 +38,10 @@ export const PostCard = ({ post, children }: PostCardProps) => {
         </Link>
         <div className="flex justify-between items-center w-full">
           <div className="flex gap-6">
-            <button type="button" className="flex items-center gap-2">
-              <IconHeart className="size-5" />
-              <span>{post.likes.length}</span>
-            </button>
+            <LikeButton
+              postId={post.id}
+              initialLikes={post.likes.map((like) => like.userId)}
+            />
             <button type="button" className="flex items-center gap-2">
               <IconMessage className="size-5" />
               <span>{post.replies.length}</span>
