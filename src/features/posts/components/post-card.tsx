@@ -21,11 +21,13 @@ export const PostCard = ({ post, children }: PostCardProps) => {
       <Card.Header>
         <div className="flex justify-between items-center">
           <div className="flex w-full gap-4 items-center">
-            <Avatar
-              src={post.author?.image ?? 'placeholder.png'}
-              alt="post avatar"
-              initials="PA"
-            />
+            <Link href={`/profile/${post.author?.id}`}>
+              <Avatar
+                src={post.author?.image ?? 'placeholder.png'}
+                alt="post avatar"
+                initials="PA"
+              />
+            </Link>
             <div className="flex gap-0 sm:gap-2 flex-col sm:flex-row">
               <h5 className="text-base font-semibold">
                 {post.author?.name ?? 'John Doe'}

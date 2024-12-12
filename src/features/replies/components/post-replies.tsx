@@ -5,6 +5,7 @@ import { ReplyForm } from '@/features/replies/components/reply-form'
 import type { client } from '@/libs/rpc'
 import type { InferResponseType } from 'hono'
 import { IconHeart } from 'justd-icons'
+import Link from 'next/link'
 import { useOptimistic } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -60,11 +61,13 @@ export const PostReplies = ({ replies }: PostRepliesProps) => {
         <>
           {index !== 0 && <Separator className="mb-4" />}
           <div key={reply.id} className="flex w-full items-center gap-4">
-            <Avatar
-              src={reply.author.image ?? '/placeholder.png'}
-              alt="avatar"
-              initials="A"
-            />
+            <Link href={`/profile/${reply.author.id}`}>
+              <Avatar
+                src={reply.author.image ?? '/placeholder.png'}
+                alt="avatar"
+                initials="A"
+              />
+            </Link>
             <div className="flex-1">
               <div className="flex justify-between items-start w-full">
                 <div className="space-y-1">

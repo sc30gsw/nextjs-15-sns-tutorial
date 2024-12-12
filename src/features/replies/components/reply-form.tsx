@@ -5,6 +5,7 @@ import { useUser } from '@clerk/nextjs'
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { IconSend } from 'justd-icons'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useActionState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -58,11 +59,13 @@ export const ReplyForm = ({ addOptimisticReply }: ReplyFormProps) => {
       action={action}
       className="w-full flex justify-between items-center gap-4 mt-4"
     >
-      <Avatar
-        src={user?.imageUrl ?? 'placeholder.png'}
-        alt="item avatar"
-        initials="PA"
-      />
+      <Link href={`/profile/${user?.id}`}>
+        <Avatar
+          src={user?.imageUrl ?? 'placeholder.png'}
+          alt="item avatar"
+          initials="PA"
+        />
+      </Link>
       <div className="w-full flex flex-col gap-1">
         <TextField {...getInputProps(fields.postId, { type: 'hidden' })} />
         <TextField

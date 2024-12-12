@@ -3,6 +3,7 @@ import { PostCardContent } from '@/features/posts/components/post-card-content'
 import { PostForm } from '@/features/posts/components/post-form'
 import { TrendingCard } from '@/features/posts/components/trending-card'
 import { currentUser } from '@clerk/nextjs/server'
+import Link from 'next/link'
 
 const Home = async () => {
   const user = await currentUser()
@@ -13,11 +14,13 @@ const Home = async () => {
         <Card className="h-[calc(100vh-2rem)] flex flex-col">
           <Card.Header className="border-b">
             <div className="flex w-full gap-4">
-              <Avatar
-                src={user?.imageUrl ? user.imageUrl : 'placeholder.png'}
-                alt="avatar"
-                initials="A"
-              />
+              <Link href={`/profile/${user?.id}`}>
+                <Avatar
+                  src={user?.imageUrl ? user.imageUrl : 'placeholder.png'}
+                  alt="avatar"
+                  initials="A"
+                />
+              </Link>
               <PostForm />
             </div>
           </Card.Header>
