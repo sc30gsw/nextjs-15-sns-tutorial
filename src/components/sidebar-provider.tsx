@@ -82,7 +82,7 @@ export const SidebarProvider = ({ children }: { children: ReactNode }) => {
             </Menu>
           </div>
         </Sidebar.Nav>
-        <div className="p-4 lg:p-6">{children}</div>
+        <main className="p-4 lg:p-6">{children}</main>
       </Sidebar.Inset>
     </Sidebar.Provider>
   )

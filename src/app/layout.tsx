@@ -36,7 +36,6 @@ const RootLayout = ({
           className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh w-dvw`}
         >
           <Providers>
-            {/* <AppHeader /> */}
             <SidebarProvider>{children}</SidebarProvider>
           </Providers>
         </body>

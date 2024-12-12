@@ -10,8 +10,8 @@ const Home = async () => {
   return (
     <div className="grid grid-cols-10 gap-4">
       <div className="col-span-10 md:col-span-8 lg:col-span-7">
-        <Card>
-          <Card.Header>
+        <Card className="h-[calc(100vh-2rem)] flex flex-col">
+          <Card.Header className="border-b">
             <div className="flex w-full gap-4">
               <Avatar
                 src={user?.imageUrl ? user.imageUrl : 'placeholder.png'}
@@ -21,8 +21,10 @@ const Home = async () => {
               <PostForm />
             </div>
           </Card.Header>
-          <Card.Content className="space-y-4">
-            <PostCardContent />
+          <Card.Content className="flex-1 overflow-y-auto mt-4">
+            <div className="space-y-4">
+              <PostCardContent />
+            </div>
           </Card.Content>
         </Card>
       </div>
@@ -32,4 +34,5 @@ const Home = async () => {
     </div>
   )
 }
+
 export default Home
