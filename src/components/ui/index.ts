@@ -19,3 +19,4 @@ export * from './skeleton';
 export * from './toast';
 export * from './button';
 export * from './loader';
+export * from './modal';
