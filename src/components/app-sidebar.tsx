@@ -3,13 +3,13 @@ import type * as React from 'react'
 import { Menu, Sidebar } from '@/components/ui'
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import {
-  IconCreditCard,
+  IconBell,
   IconDashboard,
-  IconEnvelope,
   IconLogin,
   IconMessage,
   IconPeople,
   IconPersonAdd,
+  IconSearch,
   IconSettings,
 } from 'justd-icons'
 import Link from 'next/link'
@@ -33,27 +33,27 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           <Sidebar.Item isCurrent={true} icon={IconDashboard} href="#">
             Overview
           </Sidebar.Item>
-          <Sidebar.Item icon={IconSettings} href="#">
-            Settings
+
+          <Sidebar.Item icon={IconSearch} href="#">
+            Search for Trends
           </Sidebar.Item>
-          <Sidebar.Item icon={IconCreditCard} href="#">
-            Billing
-          </Sidebar.Item>
-          <Sidebar.Item icon={IconEnvelope} href="#" badge="49.67K">
-            Newsletter
+          <Sidebar.Item icon={IconBell} href="#" badge={49}>
+            Notifications
           </Sidebar.Item>
           <Sidebar.Item icon={IconMessage} href="#" badge={35}>
             Messages
           </Sidebar.Item>
         </Sidebar.Section>
-        <Sidebar.Section collapsible={true} title="Team">
+        <Sidebar.Section collapsible={true} title="Analytics">
           <Sidebar.Item icon={IconPeople} href="#">
-            Team Overview
+            Analytics
           </Sidebar.Item>
           <Sidebar.Item icon={IconPersonAdd} href="#">
-            Add New Member
+            Add Advertisement
           </Sidebar.Item>
-          <Sidebar.Item href="#">Manage Roles</Sidebar.Item>
+          <Sidebar.Item icon={IconSettings} href="#">
+            Settings
+          </Sidebar.Item>
         </Sidebar.Section>
       </Sidebar.Content>
       <Sidebar.Footer className="lg:flex lg:flex-row hidden items-center">
