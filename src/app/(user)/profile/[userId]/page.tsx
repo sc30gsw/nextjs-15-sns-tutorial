@@ -32,7 +32,7 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
             <div>
               <div className="flex items-center gap-6">
                 <Avatar
-                  src={'/placeholder-user.jpg'}
+                  src={res.user?.image ?? '/placeholder-user.jpg'}
                   alt="avatar"
                   className="w-24 h-24 mb-4 md:mb-0"
                 />
