@@ -4,7 +4,9 @@ import { postEditFormSchema } from '@/features/posts/types/schema/post-edit-form
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { IconSend } from 'justd-icons'
+import { useRouter } from 'next/navigation'
 import { useActionState, useEffect } from 'react'
+import { toast } from 'sonner'
 
 type PostEditModalProps = {
   postId: string
@@ -34,14 +36,23 @@ export const PostEditModal = ({
     },
   })
 
+  const router = useRouter()
+
   useEffect(() => {
     if (lastResult?.status === 'success') {
-      onClose()
+      toast('Successfully updated on your post!', {
+        action: {
+          label: 'View',
+          onClick: () => {
+            router.push(`/posts/${postId}`)
+          },
+        },
+      })
     }
-  }, [lastResult, onClose])
+  }, [lastResult, postId, router])
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onClose}>
+    <Modal isOpen={isOpen} onOpenChange={isPending ? undefined : onClose}>
       <Modal.Content>
         <Modal.Header>
           <Modal.Title>Edit Post</Modal.Title>
@@ -52,6 +63,9 @@ export const PostEditModal = ({
             {...getInputProps(fields.content, { type: 'text' })}
             placeholder="What's on your mind?"
             isDisabled={isPending}
+            defaultValue={
+              lastResult?.initialValue?.content.toString() ?? content
+            }
             className="w-full"
             errorMessage={''}
           />
