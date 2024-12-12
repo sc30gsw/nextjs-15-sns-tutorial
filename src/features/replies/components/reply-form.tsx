@@ -1,5 +1,3 @@
-'use client'
-
 import { Avatar, Button, Form, Loader, TextField } from '@/components/ui'
 import { addReply } from '@/features/replies/actions/add-reply'
 import { replyFormSchema } from '@/features/replies/types/schema/reply-form-schema'
@@ -9,8 +7,23 @@ import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { IconSend } from 'justd-icons'
 import { useParams } from 'next/navigation'
 import { useActionState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
-export const ReplyForm = () => {
+type InitialReply = {
+  id: string
+  content: string
+  author: {
+    id: string
+    name: string
+    image: string
+  }
+}
+
+type ReplyFormProps = {
+  addOptimisticReply: (action: InitialReply) => void
+}
+
+export const ReplyForm = ({ addOptimisticReply }: ReplyFormProps) => {
   const [lastResult, action, isPending] = useActionState(addReply, null)
   const params = useParams()
 
@@ -21,6 +34,17 @@ export const ReplyForm = () => {
     lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: replyFormSchema })
+    },
+    onSubmit(_, { formData }) {
+      addOptimisticReply({
+        id: uuidv4(),
+        content: formData.get('content') as string,
+        author: {
+          id: user?.id ?? '',
+          name: user?.username ?? '',
+          image: user?.imageUrl ?? '/placeholder.png',
+        },
+      })
     },
     defaultValue: {
       postId: params.postId as string,

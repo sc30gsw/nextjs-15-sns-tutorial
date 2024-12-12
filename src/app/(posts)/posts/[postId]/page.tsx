@@ -1,7 +1,6 @@
 import { Card, Separator } from '@/components/ui'
 import { PostCard } from '@/features/posts/components/post-card'
 import { PostReplies } from '@/features/replies/components/post-replies'
-import { ReplyForm } from '@/features/replies/components/reply-form'
 import { ReplySkelton } from '@/features/replies/components/reply-skelton'
 import { fetcher } from '@/libs/fetcher'
 import { client } from '@/libs/rpc'
@@ -20,16 +19,9 @@ export const generateStaticParams = async () => {
   return res.posts.map((post) => ({ postId: post.id }))
 }
 
-type PostIdPageParams = {
-  params: Promise<{
-    postId: string
-  }>
-}
+const fetchPost = async (postId: string) => {
+  type ResType = InferResponseType<(typeof client.api.posts)[':postId']['$get']>
 
-type ResType = InferResponseType<(typeof client.api.posts)[':postId']['$get']>
-
-const PostIdPage = async ({ params }: PostIdPageParams) => {
-  const postId = (await params).postId
   const url = client.api.posts[':postId'].$url({
     param: { postId },
   })
@@ -38,14 +30,46 @@ const PostIdPage = async ({ params }: PostIdPageParams) => {
     next: { tags: [`posts/${postId}`] },
   })
 
-  if (!res.post) {
+  return res
+}
+
+const fetchReplies = async (postId: string) => {
+  type ResType = InferResponseType<
+    (typeof client.api.replies)[':postId']['$get']
+  >
+
+  const url = client.api.replies[':postId'].$url({
+    param: { postId },
+  })
+
+  const res = await fetcher<ResType>(url, {
+    next: { tags: [`replies/${postId}`] },
+  })
+
+  return res
+}
+
+type PostIdPageParams = {
+  params: Promise<{
+    postId: string
+  }>
+}
+
+const PostIdPage = async ({ params }: PostIdPageParams) => {
+  const postId = (await params).postId
+
+  const [postResult, repliesResult] = await Promise.all([
+    fetchPost(postId),
+    fetchReplies(postId),
+  ])
+
+  if (!postResult.post) {
     return <div>Not Found</div>
   }
 
   return (
-    <PostCard post={res.post}>
+    <PostCard post={postResult.post}>
       <Card.Footer className="flex flex-col gap-4">
-        <ReplyForm />
         <Suspense
           fallback={
             <div className="w-full flex flex-col gap-4">
@@ -57,7 +81,7 @@ const PostIdPage = async ({ params }: PostIdPageParams) => {
             </div>
           }
         >
-          <PostReplies postId={postId} />
+          <PostReplies replies={repliesResult.replies} />
         </Suspense>
       </Card.Footer>
     </PostCard>
