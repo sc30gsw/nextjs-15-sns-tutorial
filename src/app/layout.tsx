@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
+import { Providers } from '@/components/providers'
+import { SidebarProvider } from '@/components/sidebar-provider'
+import {} from '@/components/ui'
+import { ClerkProvider } from '@clerk/nextjs'
+import {} from 'justd-icons'
 import type { ReactNode } from 'react'
 
 const geistSans = localFont({
@@ -25,13 +30,17 @@ const RootLayout = ({
   children: ReactNode
 }>) => {
   return (
-    <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="ja">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh w-dvw`}
+        >
+          <Providers>
+            <SidebarProvider>{children}</SidebarProvider>
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
 

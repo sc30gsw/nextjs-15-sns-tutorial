@@ -1,6 +1,6 @@
 'use client'
-
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toast } from '@/components/ui'
 import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { RouterProvider } from 'react-aria-components'
@@ -19,6 +19,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <RouterProvider navigate={router.push}>
       <ThemeProvider enableSystem={true} attribute="class">
+        <Toast />
         {children}
       </ThemeProvider>
     </RouterProvider>
