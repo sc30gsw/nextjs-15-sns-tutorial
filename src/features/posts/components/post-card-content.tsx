@@ -12,5 +12,5 @@ export const PostCardContent = async () => {
     next: { tags: ['posts'] },
   })
 
-  return res.posts.map((item) => <PostCard key={item.posts.id} item={item} />)
+  return res.posts.map((post) => <PostCard key={post.id} post={post} />)
 }

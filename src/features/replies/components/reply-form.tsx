@@ -32,7 +32,7 @@ export const ReplyForm = () => {
     <Form
       {...getFormProps(form)}
       action={action}
-      className="w-full flex justify-between gap-4"
+      className="w-full flex justify-between items-center gap-4 mt-4"
     >
       <Avatar
         src={user?.imageUrl ?? 'placeholder.png'}

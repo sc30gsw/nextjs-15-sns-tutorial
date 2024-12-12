@@ -21,7 +21,7 @@ const Home = async () => {
               <PostForm />
             </div>
           </Card.Header>
-          <Card.Content>
+          <Card.Content className="space-y-4">
             <PostCardContent />
           </Card.Content>
         </Card>
