@@ -1,9 +1,13 @@
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { PostCard } from '@/features/posts/components/post-card'
+import { FollowButton } from '@/features/users/components/follow-button'
 import { fetcher } from '@/libs/fetcher'
 import { client } from '@/libs/rpc'
+import { currentUser } from '@clerk/nextjs/server'
 import type { InferResponseType } from 'hono'
+import { IconLocation, IconPin2, IconPlus } from 'justd-icons'
+import Link from 'next/link'
 
 type ResType = InferResponseType<(typeof client.api.users)[':userId']['$get']>
 
@@ -15,6 +19,7 @@ type ProfilePageParams = {
 
 const ProfilePage = async ({ params }: ProfilePageParams) => {
   const userId = (await params).userId
+  const loggedInUser = await currentUser()
 
   const url = client.api.users[':userId'].$url({
     param: { userId },
@@ -44,11 +49,11 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
 
               <div className="mt-4 flex items-center gap-4 text-muted-foreground">
                 <div>
-                  <MapPinIcon className="w-4 h-4 mr-1 inline" />
+                  <IconPin2 className="size-4 inline mr-1" />
                   xxxxxxxxx
                 </div>
                 <div>
-                  <LinkIcon className="w-4 h-4 mr-1 inline" />
+                  <IconLocation className="size-4 inline mr-1" />
                   xxxxxx.com
                 </div>
               </div>
@@ -79,147 +84,52 @@ const ProfilePage = async ({ params }: ProfilePageParams) => {
                 ))}
               </div>
             </div>
+
             <div className="sticky top-14 self-start space-y-6">
-              <Button className="w-full">
-                Follow
-                <PlusIcon className="w-4 h-4" />
-              </Button>
-              <div>
-                <h3 className="text-lg font-bold">Suggested</h3>
-                <div className="mt-4 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      src={'/placeholder-user.jpg'}
-                      alt="avatar"
-                      className="w-10 h-10"
-                    />
-                    <div>
-                      <div className="font-medium">Acme Inc</div>
-                      <div className="text-muted-foreground text-sm">
-                        @acmeinc
+              {loggedInUser?.id !== res.user?.id && (
+                <FollowButton
+                  isFollowing={res.following.some(
+                    (f) =>
+                      f.followerId === loggedInUser?.id &&
+                      f.followingId === res.user?.id,
+                  )}
+                  userId={res.user?.id ?? ''}
+                />
+              )}
+              {res.userWithoutMe.map((user) => (
+                <div key={user.id}>
+                  <h3 className="text-lg font-bold">Suggested</h3>
+                  <div className="mt-4 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Link href={`/profile/${user.id}`}>
+                        <Avatar
+                          src={user.image ?? '/placeholder-user.jpg'}
+                          alt="avatar"
+                          className="w-10 h-10"
+                        />
+                      </Link>
+                      <div>
+                        <div className="font-medium">{user.name}</div>
+                        <div className="text-muted-foreground text-sm">
+                          @{user.id.slice(0, 20)}
+                        </div>
                       </div>
+                      <Button
+                        size="square-petite"
+                        appearance="outline"
+                        className="ml-auto"
+                      >
+                        <IconPlus className="size-4" />
+                      </Button>
                     </div>
-                    <Button
-                      size="square-petite"
-                      appearance="outline"
-                      className="ml-auto"
-                    >
-                      <PlusIcon className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      src={'/placeholder-user.jpg'}
-                      alt="avatar"
-                      className="w-10 h-10"
-                    />
-                    <div>
-                      <div className="font-medium">Acme Inc</div>
-                      <div className="text-muted-foreground text-sm">
-                        @acmeinc
-                      </div>
-                    </div>
-                    <Button
-                      size="square-petite"
-                      appearance="outline"
-                      className="ml-auto"
-                    >
-                      <PlusIcon className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      src={'/placeholder-user.jpg'}
-                      alt="avatar"
-                      className="w-10 h-10"
-                    />
-                    <div>
-                      <div className="font-medium">Acme Inc</div>
-                      <div className="text-muted-foreground text-sm">
-                        @acmeinc
-                      </div>
-                    </div>
-                    <Button
-                      size="square-petite"
-                      appearance="outline"
-                      className="ml-auto"
-                    >
-                      <PlusIcon className="w-4 h-4" />
-                    </Button>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </main>
     </div>
-  )
-}
-
-// biome-ignore lint/suspicious/noExplicitAny: This is a generated component
-const LinkIcon = (props: any) => {
-  return (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: This is an icon from installing Sample
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-    </svg>
-  )
-}
-
-// biome-ignore lint/suspicious/noExplicitAny: This is a generated component
-const MapPinIcon = (props: any) => {
-  return (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: This is an icon from installing Sample
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  )
-}
-
-// biome-ignore lint/suspicious/noExplicitAny: This is a generated component
-const PlusIcon = (props: any) => {
-  return (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: This is an icon from installing Sample
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
   )
 }
 

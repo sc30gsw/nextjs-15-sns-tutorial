@@ -1,6 +1,6 @@
 import { db } from '@/libs/db/drizzle'
 import { follows, users } from '@/libs/db/schema'
-import { eq } from 'drizzle-orm'
+import { desc, eq, ne } from 'drizzle-orm'
 import { Hono } from 'hono'
 
 const app = new Hono().get('/:userId', async (c) => {
@@ -19,21 +19,28 @@ const app = new Hono().get('/:userId', async (c) => {
     },
   })
 
+  const userWithoutMe = await db.query.users.findMany({
+    orderBy: [desc(users.createdAt)],
+    where: ne(users.id, userId),
+  })
+
   const following = await db.query.follows.findMany({
-    where: eq(follows.followerId, userId),
-    columns: {
-      followingId: true,
+    where: eq(follows.followingId, userId),
+    with: {
+      follower: true,
+      following: true,
     },
   })
 
   const followers = await db.query.follows.findMany({
-    where: eq(follows.followingId, userId),
-    columns: {
-      followerId: true,
+    where: eq(follows.followerId, userId),
+    with: {
+      follower: true,
+      following: true,
     },
   })
 
-  return c.json({ user, followers, following }, 200)
+  return c.json({ user, userWithoutMe, followers, following }, 200)
 })
 
 export default app

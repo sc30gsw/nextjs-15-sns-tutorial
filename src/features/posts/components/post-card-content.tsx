@@ -11,7 +11,7 @@ type ResType = InferResponseType<typeof client.api.posts.$get>
 export const PostCardContent = async () => {
   const { userId } = await auth()
 
-  const res = await fetcher<ResType>(`${url}?userId=${null}`, {
+  const res = await fetcher<ResType>(`${url}?userId=${userId}`, {
     next: { tags: ['posts'] },
   })
 
