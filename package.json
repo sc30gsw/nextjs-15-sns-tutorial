@@ -22,6 +22,8 @@
     "hono": "^4.6.13",
     "justd-icons": "^1.10.0",
     "next": "15.0.4",
+    "nuqs": "^2.2.3",
+    "qs": "^6.13.1",
     "react": "^19.0.0",
     "react-aria-components": "^1.5.0",
     "react-dom": "^19.0.0",
@@ -33,6 +35,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/node": "^20",
+    "@types/qs": "^6.9.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "clsx": "^2.1.1",

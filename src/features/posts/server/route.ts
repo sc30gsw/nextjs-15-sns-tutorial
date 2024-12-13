@@ -1,19 +1,20 @@
 import { db } from '@/libs/db/drizzle'
 import { follows, posts } from '@/libs/db/schema'
-import { and, desc, eq, inArray } from 'drizzle-orm'
+import { and, desc, eq, inArray, like } from 'drizzle-orm'
 import { Hono } from 'hono'
 
 const app = new Hono()
   .get('/', async (c) => {
-    const userId = c.req.query('userId')
+    const { userId, content } = c.req.query()
 
-    if (typeof userId !== 'string' || userId === 'null') {
+    if (typeof userId !== 'string') {
       const postList = await db.query.posts.findMany({
         with: {
           author: true,
           replies: true,
           likes: true,
         },
+        where: like(posts.content, `%${content}%`),
         orderBy: [desc(posts.createdAt)],
       })
 

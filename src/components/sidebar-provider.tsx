@@ -2,6 +2,7 @@
 
 import { AppSidebar } from '@/components/app-sidebar'
 import { Button, Menu, SearchField, Separator, Sidebar } from '@/components/ui'
+import { PostSearchForm } from '@/features/posts/components/post-search-form'
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import {
   IconBell,
@@ -32,7 +33,7 @@ export const SidebarProvider = ({ children }: { children: ReactNode }) => {
               />
             </span>
             <div className="flex items-center gap-4">
-              <SearchField className="sm:inline hidden sm:ml-1.5" />
+              <PostSearchForm />
               <IconBell className="size-6" />
               <IconMail className="size-6" />
               <SignedIn>

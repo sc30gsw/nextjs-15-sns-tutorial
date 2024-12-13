@@ -2,11 +2,18 @@ import { Avatar, Card } from '@/components/ui'
 import { PostCardContent } from '@/features/posts/components/post-card-content'
 import { PostForm } from '@/features/posts/components/post-form'
 import { TrendingCard } from '@/features/posts/components/trending-card'
+import { postSearchParamsCache } from '@/features/posts/types/post-search-params'
 import { currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
+import type { SearchParams } from 'nuqs/server'
 
-const Home = async () => {
+type HomeProps = {
+  searchParams: Promise<SearchParams>
+}
+
+const Home = async ({ searchParams }: HomeProps) => {
   const user = await currentUser()
+  const { content } = await postSearchParamsCache.parse(searchParams)
 
   return (
     <div className="grid grid-cols-10 gap-4">
@@ -26,7 +33,7 @@ const Home = async () => {
           </Card.Header>
           <Card.Content className="flex-1 overflow-y-auto mt-4">
             <div className="space-y-4">
-              <PostCardContent />
+              <PostCardContent content={content} />
             </div>
           </Card.Content>
         </Card>
