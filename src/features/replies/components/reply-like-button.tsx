@@ -1,20 +1,21 @@
-'use client'
-
 import { Form, TextField } from '@/components/ui'
-import { likeAction } from '@/features/likes/actions/like-action'
 import { likeFormSchema } from '@/features/likes/types/schema/like-form-schema'
+import { replyLikeAction } from '@/features/replies/actions/reply-like-action'
 import { useUser } from '@clerk/nextjs'
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { IconHeart, IconHeartFill } from 'justd-icons'
 import { useActionState, useOptimistic } from 'react'
 
-type LikeButtonProps = {
-  postId: string
+type ReplyLikeButtonProps = {
+  replyId: string
   initialLikes: string[]
 }
 
-export const LikeButton = ({ postId, initialLikes }: LikeButtonProps) => {
+export const ReplyLikeButton = ({
+  replyId,
+  initialLikes,
+}: ReplyLikeButtonProps) => {
   const { user } = useUser()
 
   const [optimisticLike, setOptimisticLike] = useOptimistic<
@@ -33,7 +34,7 @@ export const LikeButton = ({ postId, initialLikes }: LikeButtonProps) => {
     }),
   )
 
-  const [lastResult, action] = useActionState(likeAction, null)
+  const [lastResult, action] = useActionState(replyLikeAction, null)
 
   const [form, fields] = useForm({
     constraint: getZodConstraint(likeFormSchema),
@@ -45,7 +46,7 @@ export const LikeButton = ({ postId, initialLikes }: LikeButtonProps) => {
       setOptimisticLike()
     },
     defaultValue: {
-      postId,
+      postId: replyId,
     },
   })
 

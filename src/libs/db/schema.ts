@@ -64,9 +64,9 @@ export const postRelations = relations(posts, ({ one, many }) => ({
 export const likes = pgTable(
   'likes',
   {
-    postId: text('post_id')
-      .notNull()
-      .references(() => posts.id),
+    id: text('id').primaryKey(),
+    postId: text('post_id').references(() => posts.id),
+    replyId: text('reply_id').references(() => replies.id),
     userId: text('user_id')
       .notNull()
       .references(() => users.id),
@@ -74,10 +74,26 @@ export const likes = pgTable(
     updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
   },
   (like) => ({
-    compositePk: primaryKey({ columns: [like.userId, like.postId] }),
+    postUserUnique: index('likes_post_user_unique').on(
+      like.postId,
+      like.userId,
+    ),
+    replyUserUnique: index('likes_reply_user_unique').on(
+      like.replyId,
+      like.userId,
+    ),
     postIdx: index('likes_post_idx').on(like.postId),
+    replyIdx: index('likes_reply_idx').on(like.replyId),
     userIdx: index('likes_user_idx').on(like.userId),
     createdAtIdx: index('likes_created_at_idx').on(like.createdAt),
+    targetCheck: check(
+      'likes_target_check',
+      sql`post_id IS NOT NULL OR reply_id IS NOT NULL`,
+    ),
+    exclusiveCheck: check(
+      'likes_exclusive_check',
+      sql`NOT (post_id IS NOT NULL AND reply_id IS NOT NULL)`,
+    ),
   }),
 )
 
@@ -85,6 +101,10 @@ export const likeRelations = relations(likes, ({ one }) => ({
   post: one(posts, {
     fields: [likes.postId],
     references: [posts.id],
+  }),
+  reply: one(replies, {
+    fields: [likes.replyId],
+    references: [replies.id],
   }),
   user: one(users, {
     fields: [likes.userId],
@@ -114,7 +134,7 @@ export const replies = pgTable(
   }),
 )
 
-export const replyRelations = relations(replies, ({ one }) => ({
+export const replyRelations = relations(replies, ({ one, many }) => ({
   author: one(users, {
     fields: [replies.authorId],
     references: [users.id],
@@ -123,6 +143,7 @@ export const replyRelations = relations(replies, ({ one }) => ({
     fields: [replies.postId],
     references: [posts.id],
   }),
+  likes: many(likes),
 }))
 
 export const follows = pgTable(

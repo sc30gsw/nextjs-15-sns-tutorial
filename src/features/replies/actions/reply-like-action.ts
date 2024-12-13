@@ -9,7 +9,7 @@ import { and, eq } from 'drizzle-orm'
 import { revalidateTag } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
 
-export const likeAction = async (_: unknown, formData: FormData) => {
+export const replyLikeAction = async (_: unknown, formData: FormData) => {
   const { userId } = await auth()
 
   if (!userId) {
@@ -26,7 +26,7 @@ export const likeAction = async (_: unknown, formData: FormData) => {
 
   const existedLike = await db.query.likes.findFirst({
     where: and(
-      eq(likes.postId, submission.value.postId),
+      eq(likes.replyId, submission.value.postId),
       eq(likes.userId, userId),
     ),
   })
@@ -40,10 +40,10 @@ export const likeAction = async (_: unknown, formData: FormData) => {
   } else {
     await db.insert(likes).values({
       id: uuidv4(),
-      postId: submission.value.postId,
+      replyId: submission.value.postId,
       userId,
     })
   }
 
-  revalidateTag(`likes/${submission.value.postId}`)
+  revalidateTag('replies')
 }

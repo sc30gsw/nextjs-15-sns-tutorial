@@ -10,6 +10,7 @@ const app = new Hono().get('/:postId', async (c) => {
     with: {
       author: true,
       post: true,
+      likes: true,
     },
     orderBy: [desc(replies.createdAt)],
     where: eq(replies.postId, postId),
