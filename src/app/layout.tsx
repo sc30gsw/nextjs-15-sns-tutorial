@@ -3,10 +3,10 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { SidebarProvider } from '@/components/sidebar-provider'
-import {} from '@/components/ui'
+import { Loader } from '@/components/ui'
 import { ClerkProvider } from '@clerk/nextjs'
 import {} from 'justd-icons'
-import type { ReactNode } from 'react'
+import { type ReactNode, Suspense } from 'react'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -36,7 +36,15 @@ const RootLayout = ({
           className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh w-dvw`}
         >
           <Providers>
-            <SidebarProvider>{children}</SidebarProvider>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center min-h-dvh">
+                  <Loader className="size-7" />
+                </div>
+              }
+            >
+              <SidebarProvider>{children}</SidebarProvider>
+            </Suspense>
           </Providers>
         </body>
       </html>
