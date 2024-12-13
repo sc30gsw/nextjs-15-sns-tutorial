@@ -18,6 +18,10 @@ type InitialReply = {
     name: string
     image: string
   }
+  likes: {
+    postId: string
+    userId: string
+  }[]
 }
 
 type ReplyFormProps = {
@@ -45,6 +49,7 @@ export const ReplyForm = ({ addOptimisticReply }: ReplyFormProps) => {
           name: user?.username ?? '',
           image: user?.imageUrl ?? '/placeholder.png',
         },
+        likes: [],
       })
     },
     defaultValue: {

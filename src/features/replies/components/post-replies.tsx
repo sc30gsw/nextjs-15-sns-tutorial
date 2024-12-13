@@ -2,9 +2,9 @@
 
 import { Avatar, Separator } from '@/components/ui'
 import { ReplyForm } from '@/features/replies/components/reply-form'
+import { ReplyLikeButton } from '@/features/replies/components/reply-like-button'
 import type { client } from '@/libs/rpc'
 import type { InferResponseType } from 'hono'
-import { IconHeart } from 'justd-icons'
 import Link from 'next/link'
 import { useOptimistic } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -20,6 +20,10 @@ type InitialReply = {
     name: string
     image: string
   }
+  likes: {
+    postId: string
+    userId: string
+  }[]
 }
 
 type PostRepliesProps = {
@@ -28,19 +32,22 @@ type PostRepliesProps = {
 
 export const PostReplies = ({ replies }: PostRepliesProps) => {
   const initialOptimisticReplies = replies.map((reply) => ({
-    id: uuidv4(),
+    id: reply.id,
     content: reply.content,
     author: {
       id: reply.author.id,
       name: reply.author.name,
       image: reply.author.image ?? '/placeholder.png',
     },
+    likes: reply.likes.map((like) => ({
+      postId: like.postId,
+      userId: like.userId,
+    })),
   }))
 
   const [optimisticReplies, addOptimisticReply] = useOptimistic(
     initialOptimisticReplies,
     (currentState, newState: InitialReply) => [
-      ...currentState,
       {
         id: uuidv4(),
         content: newState.content,
@@ -49,7 +56,9 @@ export const PostReplies = ({ replies }: PostRepliesProps) => {
           image: newState.author.image ?? '/placeholder.png',
           name: newState.author.name,
         },
+        likes: newState.likes,
       },
+      ...currentState,
     ],
   )
 
@@ -76,12 +85,10 @@ export const PostReplies = ({ replies }: PostRepliesProps) => {
                     @{reply.author?.id}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  className="text-neutral-400 hover:text-neutral-600 transition-colors"
-                >
-                  <IconHeart className="size-5" />
-                </button>
+                <ReplyLikeButton
+                  replyId={reply.id}
+                  initialLikes={reply.likes.map((like) => like.userId)}
+                />
               </div>
               <p className="mt-2 text-base break-words">{reply.content}</p>
             </div>

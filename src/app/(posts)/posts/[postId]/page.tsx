@@ -36,7 +36,7 @@ const fetchReplies = async (postId: string) => {
   })
 
   const res = await fetcher<ResType>(url, {
-    next: { tags: [`replies/${postId}`] },
+    next: { tags: ['replies'] },
   })
 
   return res

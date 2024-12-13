@@ -15,6 +15,20 @@
       "when": 1733910732011,
       "tag": "0001_tired_roughhouse",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734048991444,
+      "tag": "0002_familiar_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1734049198322,
+      "tag": "0003_colorful_power_pack",
+      "breakpoints": true
     }
   ]
 }
