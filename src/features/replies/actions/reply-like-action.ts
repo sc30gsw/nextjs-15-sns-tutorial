@@ -32,11 +32,7 @@ export const replyLikeAction = async (_: unknown, formData: FormData) => {
   })
 
   if (existedLike) {
-    await db
-      .delete(likes)
-      .where(
-        and(eq(likes.id, existedLike.id), eq(likes.userId, existedLike.userId)),
-      )
+    await db.delete(likes).where(eq(likes.id, existedLike.id))
   } else {
     await db.insert(likes).values({
       id: uuidv4(),
